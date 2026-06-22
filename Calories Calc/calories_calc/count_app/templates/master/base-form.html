@@ -1,0 +1,168 @@
+{% extends 'master/base.html' %}
+
+{% block content %}
+<style>
+  .form-page-wrap {
+    max-width: 580px;
+    margin: 40px auto;
+    padding: 0 16px;
+  }
+  
+  .form-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+  }
+
+  .form-card-header {
+    padding: 40px 40px 30px;
+    background: linear-gradient(to bottom, var(--bg-secondary), var(--bg-card));
+    border-bottom: 1px solid var(--border);
+  }
+
+  .form-card-header .form-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    background: white;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+  }
+
+  [data-theme="dark"] .form-card-header .form-icon {
+    background: var(--bg-secondary);
+    color: white;
+  }
+
+  .form-card-header h1 { 
+    font-size: 28px; 
+    font-weight: 700;
+    margin-bottom: 8px; 
+    color: var(--text-primary);
+  }
+  
+  .form-card-header p { 
+    color: var(--text-secondary); 
+    font-size: 15px; 
+    margin: 0; 
+  }
+
+  .form-card-body { padding: 40px; }
+
+  .form-card-body p { margin-bottom: 24px; }
+  
+  .form-card-body label {
+    display: block;
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .form-card-body input,
+  .form-card-body select,
+  .form-card-body textarea {
+    width: 100%;
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-size: 15px;
+    padding: 14px 18px;
+    transition: all 0.2s ease;
+    outline: none;
+  }
+
+  .form-card-body input:focus,
+  .form-card-body textarea:focus {
+    background: var(--bg-card);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-soft);
+  }
+
+  .errorlist { 
+    list-style: none; 
+    padding: 12px; 
+    margin: 10px 0 0; 
+    background: #fef2f2;
+    border-radius: 10px;
+    border: 1px solid #fecaca;
+  }
+  
+  .errorlist li { 
+    color: #dc2626; 
+    font-size: 13px; 
+    font-weight: 500;
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+  }
+
+  .form-submit-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .form-back-link {
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 14px;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .form-back-link:hover { color: var(--accent); }
+</style>
+
+<div class="form-page-wrap">
+  <div class="form-card">
+    <div class="form-card-header">
+      <div class="form-icon">
+        {% if 'Password' in form_title %}
+          <i class="bi bi-shield-lock"></i>
+        {% elif 'Profile' in form_title %}
+          <i class="bi bi-person-badge"></i>
+        {% else %}
+          <i class="bi bi-pencil-square"></i>
+        {% endif %}
+      </div>
+      <h1>{{ form_title }}</h1>
+      <p>
+        {% if 'Password' in form_title %}Secure your account with a unique password.
+        {% elif 'Profile' in form_title %}Keep your health metrics accurate and up to date.
+        {% else %}Please provide the information requested below.{% endif %}
+      </p>
+    </div>
+
+    <div class="form-card-body">
+      <form action="" method="POST" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        
+        {{ form_data.as_p }}
+
+        <div class="form-submit-row">
+          <a href="javascript:history.back()" class="form-back-link">
+            <i class="bi bi-chevron-left"></i> Cancel
+          </a>
+          <button type="submit" class="btn-ct">
+            {{ btn_name }} <i class="bi bi-check-circle ms-2"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}

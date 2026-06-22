@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Caloric | Track Your Journey</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+    <style>
+      :root {
+        --bg-primary: #f8fafc;
+        --bg-card: #ffffff;
+        --bg-secondary: #f1f5f9;
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --text-muted: #94a3b8;
+        --border: #e2e8f0;
+        --accent: #16a34a;
+        --accent-bright: #22c55e;
+        --accent-soft: rgba(22, 163, 74, 0.1);
+        --shadow-md: 0 10px 25px -5px rgba(0,0,0,0.05);
+      }
+
+      [data-theme="dark"] {
+        --bg-primary: #0f172a;
+        --bg-card: #1e293b;
+        --bg-secondary: #334155;
+        --text-primary: #f8fafc;
+        --text-secondary: #94a3b8;
+        --text-muted: #64748b;
+        --border: #334155;
+        --accent: #22c55e;
+        --accent-soft: rgba(34, 197, 94, 0.2);
+        --shadow-md: 0 20px 40px rgba(0,0,0,0.3);
+      }
+
+      body {
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
+        transition: background-color 0.3s, color 0.3s;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      main { flex: 1; padding: 40px 0; }
+
+      input, select, textarea {
+        color: var(--text-primary);
+        caret-color: var(--accent);
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        color: var(--text-primary);
+        outline: none;
+      }
+
+      input::placeholder,
+      textarea::placeholder {
+        color: var(--text-muted);
+        opacity: 1;
+      }
+
+      .form-card-body input,
+      .form-card-body select,
+      .form-card-body textarea {
+        width: 100%;
+        background: var(--bg-primary);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        color: var(--text-primary) !important; 
+        font-size: 15px;
+        padding: 14px 18px;
+        transition: all 0.2s ease;
+        outline: none;
+      }
+
+      .form-card-body input:focus,
+      .form-card-body select:focus,
+      .form-card-body textarea:focus {
+        background: var(--bg-card);
+        border-color: var(--accent);
+        box-shadow: 0 0 0 4px var(--accent-soft);
+        color: var(--text-primary) !important; 
+      }
+
+      input:-webkit-autofill,
+      input:-webkit-autofill:hover, 
+      input:-webkit-autofill:focus,
+      select:-webkit-autofill,
+      select:-webkit-autofill:hover,
+      select:-webkit-autofill:focus {
+        -webkit-text-fill-color: var(--text-primary);
+        -webkit-box-shadow: 0 0 0px 1000px var(--bg-card) inset;
+        transition: background-color 5000s ease-in-out 0s;
+      }
+
+      .btn-ct {
+        background: var(--accent);
+        color: white !important;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .btn-ct:hover { transform: translateY(-2px); box-shadow: 0 5px 15px var(--accent-soft); }
+
+      .btn-ct-outline {
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--text-primary);
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-weight: 500;
+        transition: 0.2s;
+      }
+      .btn-ct-outline:hover { background: var(--bg-secondary); border-color: var(--accent); }
+
+      .card-ui {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        box-shadow: var(--shadow-md);
+      }
+
+      .alert { border-radius: 12px; border: none; font-weight: 500; }
+    </style>
+
+    <script>
+      (function() {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      })();
+    </script>
+
+    {% block extra_head %}{% endblock %}
+  </head>
+
+  <body>
+    {% include 'master/navbar.html' %}
+
+    <main>
+      <div class="container">
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        {% block content %}{% endblock %}
+      </div>
+    </main>
+
+    {% include 'master/footer.html' %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      const toggleBtn = document.getElementById('themeToggle');
+      
+      function updateUI(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        
+        const icon = document.querySelector('#themeToggle i');
+        if (icon) {
+          icon.className = theme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
+        }
+      }
+      
+      if (toggleBtn) {
+        updateUI(document.documentElement.getAttribute('data-theme'));
+
+        toggleBtn.addEventListener('click', () => {
+          const current = document.documentElement.getAttribute('data-theme');
+          updateUI(current === 'dark' ? 'light' : 'dark');
+        });
+      }
+    </script>
+
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

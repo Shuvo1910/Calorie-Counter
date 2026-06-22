@@ -1,0 +1,185 @@
+<style>
+  .ct-footer {
+    border-top: 1px solid var(--border);
+    background: var(--bg-card);
+    padding: 60px 0 30px;
+    margin-top: 100px;
+  }
+  
+  .ct-footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+  
+  .ct-footer-brand {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    color: var(--text-primary) !important;
+    transition: all 0.3s ease;
+  }
+  
+  .ct-footer-brand span {
+    color: var(--accent);
+    transition: all 0.3s ease;
+  }
+  
+  .ct-footer-brand:hover {
+    color: transparent !important;
+    -webkit-text-stroke: 1px var(--accent);
+  }
+  
+  .ct-footer-brand:hover span {
+    color: var(--accent) !important;
+    -webkit-text-stroke: 0px;
+  }
+  
+  .ct-footer-brand:hover i {
+    -webkit-text-stroke: 0px;
+  }
+  
+  .ct-footer-desc {
+    color: var(--text-secondary);
+    font-size: 14px;
+    max-width: 300px;
+    line-height: 1.6;
+  }
+  
+  .ct-footer-heading {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+  }
+  
+  .ct-footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .ct-footer-links a {
+    color: var(--text-secondary);
+    font-size: 14px;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  
+  .ct-footer-links a:hover {
+    color: var(--accent);
+  }
+  
+  .ct-footer-divider {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 30px;
+  }
+  
+  .ct-footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  
+  .ct-social-links {
+    display: flex;
+    gap: 15px;
+    font-size: 18px;
+  }
+  
+  @media (max-width: 768px) {
+    .ct-footer-grid {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    .ct-footer-brand,
+    .ct-footer-desc {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .ct-footer-bottom {
+      flex-direction: column;
+      gap: 15px;
+    }
+  }
+</style>
+
+<footer class="ct-footer">
+  <div class="container">
+    <div class="ct-footer-grid">
+      <div class="ct-footer-info">
+        <a href="{% url 'home_page' %}" class="ct-logo">
+          <i class="bi bi-lightning-charge-fill"></i>
+          <b class="logo-word-1">Calorie</b><span>Track</span>
+        </a>
+        <p class="ct-footer-desc">Simplifying health tracking for everyone. Monitor your nutrition and reach your fitness goals with precision.</p>
+      </div>
+
+      <div>
+        <h4 class="ct-footer-heading">Platform</h4>
+        <ul class="ct-footer-links">
+          <li>
+            <a href="{% url 'home_page' %}">Home</a>
+          </li>
+          {% if user.is_authenticated %}
+            <li>
+              <a href="{% url 'dashboard' %}">Dashboard</a>
+            </li>
+            <li>
+              <a href="{% url 'profile' %}">My Profile</a>
+            </li>
+          {% else %}
+            <li>
+              <a href="{% url 'login_page' %}">Login</a>
+            </li>
+            <li>
+              <a href="{% url 'register_page' %}">Join Now</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+
+
+      <div>
+        <h4 class="ct-footer-heading">Community</h4>
+        <ul class="ct-footer-links">
+          <li>
+            <a href="#">Privacy Policy</a>
+          </li>
+          <li>
+            <a href="#">Terms of Service</a>
+          </li>
+          <li>
+            <a href="#">Help Center</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ct-footer-divider"></div>
+
+    <div class="ct-footer-bottom">
+      <div>© 2026 CalorieTrack. Built for better living.</div>
+
+      <div class="ct-social-links">
+        <a href="#" class="text-secondary"><i class="bi bi-twitter-x"></i></a>
+        <a href="#" class="text-secondary"><i class="bi bi-instagram"></i></a>
+        <a href="#" class="text-secondary"><i class="bi bi-github"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>

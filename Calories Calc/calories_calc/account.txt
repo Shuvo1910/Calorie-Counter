@@ -1,0 +1,4 @@
+Admin Panel
+
+admin
+pwd = 1234

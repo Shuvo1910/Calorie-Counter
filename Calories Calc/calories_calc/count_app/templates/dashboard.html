@@ -1,0 +1,209 @@
+{% extends 'master/base.html' %}
+
+{% block content %}
+  <style>
+    .dashboard-container {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    
+    .dash-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 32px;
+    }
+    
+    .dash-header a {
+      background: none;
+    }
+    .dash-header a:hover {
+      color: green;
+    }
+    
+    .dash-header h1 {
+      font-size: 32px;
+      margin-bottom: 4px;
+    }
+    
+    .dash-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    
+    .stat-widget {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+    
+    .stat-widget:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+    }
+    
+    .stat-icon {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      font-size: 24px;
+      opacity: 0.2;
+      color: var(--accent);
+    }
+    
+    .stat-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      display: block;
+    }
+    
+    .stat-number {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+    
+    .stat-number span {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-left: 4px;
+    }
+    
+    .logger-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+    
+    .logger-info {
+      padding: 40px;
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border);
+    }
+    
+    .logger-form {
+      padding: 40px;
+    }
+    
+    .form-group-flex {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    
+    .form-input-ct {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      color: var(--text-primary); 
+      width: 100%;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    .form-input-ct:focus {
+      border-color: var(--accent);
+      background: var(--bg-card); 
+      color: var(--text-primary); 
+      box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+    
+    @media (max-width: 850px) {
+      .logger-card {
+        grid-template-columns: 1fr;
+      }
+      .logger-info {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: 30px;
+      }
+      .logger-form {
+        padding: 30px;
+      }
+    }
+  </style>
+
+  <div class="dashboard-container">
+    <div class="dash-header">
+      <div>
+        <span class="text-accent fw-bold small text-uppercase">Overview</span>
+        <h1>Hello, {{ request.user.username }}!</h1>
+        <p class="text-secondary m-0">Here's your health summary for today.</p>
+      </div>
+      <a href="{% url 'profile' %}" class="btn-ct-outline" style="border-radius: 12px; text-decoration: none;"><i class="bi bi-person-circle me-2"></i> My Profile</a>
+    </div>
+
+    {% with profile=request.user.user_profile %}
+      <div class="dash-grid">
+        <div class="stat-widget">
+          <i class="bi bi-speedometer2 stat-icon"></i>
+          <span class="stat-label">Body Mass Index</span>
+          <div class="stat-number text-success">{{ profile.bmi|default:'—' }}</div>
+        </div>
+
+        <div class="stat-widget">
+          <i class="bi bi-fire stat-icon"></i>
+          <span class="stat-label">Daily BMR</span>
+          <div class="stat-number">
+            {{ profile.bmr|floatformat:1|default:'—' }} <span>kcal</span>
+          </div>
+        </div>
+
+        <div class="stat-widget">
+          <i class="bi bi-basket stat-icon"></i>
+          <span class="stat-label">Calorie Consumed</span>
+          <div class="stat-number text-danger">
+            {{ calories_today }} <span>kcal</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="logger-card">
+        <div class="logger-info">
+          <h3 class="fw-bold">Track Nutrition</h3>
+          <p class="text-secondary small">Consistency is key. Log your meals immediately to keep your data accurate.</p>
+
+          <div class="mt-4 pt-3 border-top">
+            <div class="d-flex align-items:center justify-content-between small mb-2">
+              <span class="text-secondary">Current Weight:</span>
+              <span class="fw-bold">{{ profile.weight|default:'--' }} kg</span>
+            </div>
+            <div class="d-flex align-items:center justify-content-between small">
+              <span class="text-secondary">Height:</span>
+              <span class="fw-bold">{{ profile.height|default:'--' }} cm</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="logger-form">
+          <form method="POST" class="h-100 d-flex flex-column justify-content-center">
+            {% csrf_token %}
+            <label class="small fw-bold text-uppercase mb-2" style="letter-spacing: 1px;">Consumed items</label>
+
+            <div class="form-group-flex">
+              <input name="calorie_consumed" type="number" placeholder="1, 2 , or 3 ..." class="form-input-ct" required />
+            </div>
+
+            <button type="submit" class="btn-ct w-100 mt-2" style="padding: 16px;">Add to Daily Log <i class="bi bi-arrow-right ms-2"></i></button>
+          </form>
+        </div>
+      </div>
+    {% endwith %}
+  </div>
+{% endblock %}

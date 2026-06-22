@@ -1,0 +1,226 @@
+<style>
+  .ct-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+  }
+  
+  .ct-nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+  }
+  
+  .ct-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    text-decoration: none;
+    color: var(--text-primary) !important;
+    letter-spacing: -0.5px;
+    transition: all 0.3s ease;
+  }
+  
+  .ct-logo {
+    color: var(--text-primary);
+  }
+  
+  .ct-logo span {
+    color: var(--accent);
+    transition: all 0.3s ease;
+  }
+  
+  .ct-logo:hover {
+    color: transparent !important;
+    -webkit-text-stroke: 1px var(--accent);
+  }
+  
+  .ct-logo:hover span {
+    color: var(--accent) !important;
+    -webkit-text-stroke: 0px;
+  }
+  
+  .ct-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .ct-nav-links a {
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+  
+  .ct-nav-links a:hover {
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+  
+  .ct-nav-links a.active {
+    color: var(--accent);
+    background: var(--accent-soft);
+    font-weight: 600;
+  }
+  
+  .ct-nav-links a.btn-ct {
+    background: var(--accent);
+    color: white !important;
+    margin-left: 8px;
+    padding: 10px 20px;
+  }
+  
+  .ct-nav-links a.btn-ct:hover {
+    background: var(--accent-bright);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--accent-soft);
+  }
+  
+  .theme-btn {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .theme-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  
+  .ct-toggler {
+    display: none;
+    border: none;
+    background: transparent;
+    font-size: 24px;
+    color: var(--text-primary);
+  }
+  
+  @media (max-width: 768px) {
+    .ct-toggler {
+      display: block;
+    }
+  
+    .ct-nav-links {
+      position: absolute;
+      top: 72px;
+      left: 0;
+      right: 0;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      flex-direction: column;
+      padding: 20px;
+      gap: 10px;
+      display: none;
+      box-shadow: var(--shadow-md);
+    }
+  
+    .ct-nav-links.open {
+      display: flex;
+    }
+  
+    .ct-nav-links a {
+      width: 100%;
+      text-align: center;
+    }
+  
+    .ct-nav-actions {
+      margin-left: auto;
+      margin-right: 15px;
+    }
+  }
+</style>
+
+<nav class="ct-nav">
+  <div class="container ct-nav-inner">
+
+    <a href="{% url 'home_page' %}" class="ct-logo">
+      <i class="bi bi-lightning-charge-fill"></i>
+      <b class="logo-word-1">Calorie</b><span>Track</span>
+    </a>
+
+    <ul class="ct-nav-links" id="navLinks">
+      <li>
+        <a class="{% if request.resolver_match.url_name == 'home_page' %}active{% endif %}" href="{% url 'home_page' %}">Home</a>
+      </li>
+
+      {% if user.is_authenticated %}
+        <li>
+          <a class="{% if request.resolver_match.url_name == 'consume_profile' %}active{% endif %}" href="{% url 'consume_profile' %}">Consume Calorie</a>
+        </li>
+        <li>
+          <a class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">Dashboard</a>
+        </li>
+        <li>
+          <a class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="{% url 'profile' %}">Profile</a>
+        </li>
+        <li>
+          <a href="{% url 'logout_page' %}" style="color: #ef4444;">Logout</a>
+        </li>
+      {% else %}
+        <li>
+          <a href="{% url 'login_page' %}">Login</a>
+        </li>
+        <li>
+          <a href="{% url 'register_page' %}" class="btn-ct">Get Started</a>
+        </li>
+      {% endif %}
+    </ul>
+
+    <div class="ct-nav-actions">
+      <button class="theme-btn" id="themeToggle" title="Toggle Theme"><i class="bi bi-moon-stars"></i></button>
+
+      <button class="ct-toggler" id="navToggle"><i class="bi bi-list"></i></button>
+    </div>
+  </div>
+</nav>
+
+<script>
+  const navToggle = document.getElementById('navToggle')
+  const navLinks = document.getElementById('navLinks')
+  
+  navToggle.onclick = () => {
+    navLinks.classList.toggle('open')
+    const icon = navToggle.querySelector('i')
+    icon.classList.toggle('bi-list')
+    icon.classList.toggle('bi-x-lg')
+  }
+  
+  const themeBtn = document.getElementById('themeToggle')
+  const themeIcon = themeBtn.querySelector('i')
+  
+  function updateNavbarTheme(theme) {
+    themeIcon.className = theme === 'dark' ? 'bi bi-sun' : 'bi bi-moon-stars'
+  }
+  
+  updateNavbarTheme(document.documentElement.getAttribute('data-theme'))
+  
+  themeBtn.addEventListener('click', () => {
+    setTimeout(() => {
+      const newTheme = document.documentElement.getAttribute('data-theme')
+      updateNavbarTheme(newTheme)
+    }, 50)
+  })
+</script>
