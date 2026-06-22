@@ -6,3 +6,7 @@
 - .\venv\Script\activate
 - pip install django pillow
 - python manage.py runserver
+
+# Admin Panel:
+usename: admin
+passwd: 1234
