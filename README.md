@@ -8,5 +8,5 @@
 - python manage.py runserver
 
 # Admin Panel:
-usename: admin
-passwd: 1234
+- usename: admin
+- passwd: 1234
