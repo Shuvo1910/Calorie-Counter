@@ -23,7 +23,7 @@ def register_page(request):
             user = form_data.save()
             login(request, user)
             messages.success(request, f'Registration successful! Welcome, {user.username}.')
-            return redirect('dashboard')  
+            return redirect('login_page')  
         else:
             messages.error(request, 'Registration failed. Please correct the errors.')
     else:

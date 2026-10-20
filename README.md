@@ -2,11 +2,11 @@
 
 # Setup Python Environment:
 
-- python -m venv venv (as your wise, whatever your named the second one)
+- python -m venv environment_name 
 - .\venv\Script\activate
-- pip install django pillow
+- pip install requirement.txt
 - python manage.py runserver
 
 # Admin Panel:
-- usename: admin
-- passwd: 1234
+- Create a profile 
+- update profile after login
