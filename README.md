@@ -1,4 +1,4 @@
-![Alt text describing the image](Calories%20Calc/Calorie%20Counter%20Web.jpg)
+![Alt text describing the image](Calories%20Calc/CalorieCounterWeb.jpg)
 
 # Setup Python Environment:
 
